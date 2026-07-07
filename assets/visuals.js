@@ -1,0 +1,3 @@
+// Optimized derivatives of supplied project visuals.
+export const heroDesktop = 'data:image/webp;base64,UklGRnJ0AABXRUJQVlA4TGZ0AAAvj8CAnwF0dW5uYl5Jc2FjJCQkJCQk...
+';
