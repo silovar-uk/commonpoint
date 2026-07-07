@@ -6,6 +6,7 @@
   <meta name="description" content="初めて観戦ガイドの中段に差し込む「あなたとつながる選手を見つけよう」コンポーネントのプレビュー。" />
   <title>共通点選手パーツ | 初めて観戦ガイド プレビュー</title>
   <link rel="stylesheet" href="component/common-point.css" />
+  <link rel="stylesheet" href="component/common-point-v2.css" />
   <style>
     .cp-visually-hidden { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important; }
     .cp-guide-player__panel[aria-hidden="true"] { visibility:hidden; }
@@ -34,8 +35,8 @@
       <div class="cp-guide-player__inner">
         <header class="cp-guide-player__header">
           <p class="cp-guide-player__eyebrow">FIND YOUR PLAYER</p>
-          <h3 id="cp-guide-player-title">あなたとつながる選手を見つけよう</h3>
-          <p class="cp-guide-player__lead">同じ誕生日、出身地、世代。気になる共通点から、応援したい選手を探してみよう。</p>
+          <h3 id="cp-guide-player-title">あなたは、どこで<br />レッズとつながる？</h3>
+          <p class="cp-guide-player__lead">誕生日、出身地、世代。あなたらしい入口から、気になる選手を見つけよう。</p>
         </header>
 
         <div class="cp-guide-player__choices" aria-label="選手の探し方">
@@ -71,7 +72,7 @@
                   <div class="cp-guide-player__form-row">
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">誕生月</span><select class="cp-guide-player__select" data-cp-month aria-label="誕生月"></select></label>
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">誕生日</span><select class="cp-guide-player__select" data-cp-day aria-label="誕生日"></select></label>
-                    <button class="cp-guide-player__search-button" type="button" data-cp-action="birthday-search">選手を探す</button>
+                    <button class="cp-guide-player__search-button" type="button" data-cp-action="birthday-search">つながる選手を探す</button>
                   </div>
                 </div>
                 <aside class="cp-guide-player__panel-side" aria-hidden="true"><strong>01</strong><span>SAME DAY / SAME MONTH</span></aside>
@@ -91,7 +92,7 @@
                   </div>
                   <div class="cp-guide-player__form-row">
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">都道府県</span><select class="cp-guide-player__select" data-cp-prefecture aria-label="都道府県"></select></label>
-                    <button class="cp-guide-player__search-button" type="button" data-cp-action="birthplace-search">選手を探す</button>
+                    <button class="cp-guide-player__search-button" type="button" data-cp-action="birthplace-search">つながる選手を探す</button>
                   </div>
                   <div class="cp-guide-player__form-row" data-cp-regions aria-label="出身選手がいる都道府県の一覧"></div>
                   <button type="button" class="cp-guide-player__subaction" data-cp-action="overseas">海外出身の選手を見る</button>
@@ -109,7 +110,7 @@
                   <p>同じ生まれ年を優先して、いなければ前後1年、同じ年代の順で選手を探します。</p>
                   <div class="cp-guide-player__form-row">
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">生まれ年</span><select class="cp-guide-player__select" data-cp-year aria-label="生まれ年"></select></label>
-                    <button class="cp-guide-player__search-button" type="button" data-cp-action="generation-search">選手を探す</button>
+                    <button class="cp-guide-player__search-button" type="button" data-cp-action="generation-search">つながる選手を探す</button>
                   </div>
                 </div>
                 <aside class="cp-guide-player__panel-side" aria-hidden="true"><strong>03</strong><span>SAME YEAR / SAME ERA</span></aside>
@@ -133,5 +134,6 @@
   </main>
 
   <script type="module" src="component/common-point.js"></script>
+  <script type="module" src="component/common-point-v2.js"></script>
 </body>
 </html>
