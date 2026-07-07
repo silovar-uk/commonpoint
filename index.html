@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="誕生日、出身地、世代から、あなたとつながる浦和レッズの選手を探すプロトタイプ。" />
+  <title>共通点のある選手を探す | URAWA REDS PROTOTYPE</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="cp-skip-link" href="#finder">検索へ移動</a>
+
+  <header class="cp-site-header">
+    <div class="cp-shell cp-site-header__inner">
+      <a class="cp-wordmark" href="#top" aria-label="共通点のある選手を探す トップへ">
+        <span class="cp-wordmark__mark" aria-hidden="true"></span>
+        <span>
+          <strong>URAWA REDS</strong>
+          <small>COMMON POINT / PROTOTYPE</small>
+        </span>
+      </a>
+      <a class="cp-header-link" href="https://www.urawa-reds.co.jp/topteam/" target="_blank" rel="noopener noreferrer">公式トップチームを見る <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="cp-hero" aria-labelledby="hero-title">
+      <div class="cp-hero__art" aria-hidden="true"><span class="cp-hero__node cp-hero__node--calendar"></span><span class="cp-hero__node cp-hero__node--pin"></span><span class="cp-hero__node cp-hero__node--rings"></span></div>
+      <div class="cp-shell cp-hero__inner">
+        <p class="cp-kicker">FIND YOUR REDS PLAYER</p>
+        <h1 id="hero-title">共通点のある<br />選手を探す</h1>
+        <p class="cp-hero__lead">同じ誕生日、出身地、世代。<br />あなたとつながる選手を見つけよう。</p>
+        <div class="cp-hero__actions" aria-label="探し方を選ぶ">
+          <a class="cp-button cp-button--light" href="#finder" data-jump-tab="birthday">誕生日から探す</a>
+          <a class="cp-button cp-button--outline-light" href="#finder" data-jump-tab="birthplace">出身地から探す</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cp-notice" aria-label="プロトタイプについて">
+      <div class="cp-shell cp-notice__inner">
+        <span class="cp-notice__badge">PROTOTYPE</span>
+        <p>これは初めて観戦ガイドへの組み込みを想定した静的デモです。入力した誕生日・出身地・生まれ年は保存・送信しません。</p>
+      </div>
+    </section>
+
+    <section class="cp-finder" id="finder" aria-labelledby="finder-title">
+      <div class="cp-shell">
+        <div class="cp-section-heading">
+          <p class="cp-kicker cp-kicker--dark">DISCOVER</p>
+          <h2 id="finder-title">あなたの入口から、<br class="cp-mobile-only" />気になる選手へ。</h2>
+          <p>気になる共通点をひとつ選んでください。結果はこのページだけで表示され、プロフィールは公式サイトへ遷移します。</p>
+        </div>
+
+        <div class="cp-tabs" role="tablist" aria-label="選手の探し方">
+          <button class="cp-tab is-active" type="button" role="tab" id="tab-birthday" aria-controls="panel-birthday" aria-selected="true" data-tab="birthday">
+            <span class="cp-tab__icon" data-icon="birthday" aria-hidden="true"></span>
+            <span>誕生日から探す</span>
+          </button>
+          <button class="cp-tab" type="button" role="tab" id="tab-birthplace" aria-controls="panel-birthplace" aria-selected="false" data-tab="birthplace">
+            <span class="cp-tab__icon" data-icon="pin" aria-hidden="true"></span>
+            <span>出身地から探す</span>
+          </button>
+          <button class="cp-tab" type="button" role="tab" id="tab-generation" aria-controls="panel-generation" aria-selected="false" data-tab="generation">
+            <span class="cp-tab__icon" data-icon="rings" aria-hidden="true"></span>
+            <span>世代から探す</span>
+          </button>
+        </div>
+
+        <div class="cp-panels">
+          <section class="cp-panel is-active" id="panel-birthday" role="tabpanel" aria-labelledby="tab-birthday" data-panel="birthday">
+            <div class="cp-search-layout cp-search-layout--birthday">
+              <div class="cp-search-card">
+                <div class="cp-search-card__topline"><span class="cp-mini-icon" data-icon="birthday" aria-hidden="true"></span> BIRTHDAY</div>
+                <h3>あなたの誕生日を選んでください</h3>
+                <p>同じ日に生まれた選手、同じ月に生まれた選手、そして誕生日の近くにあるホームゲームを探します。</p>
+                <div class="cp-select-row">
+                  <label class="cp-select-wrap"><span class="cp-visually-hidden">月</span><select id="birthday-month" aria-label="誕生日の月"></select></label>
+                  <label class="cp-select-wrap"><span class="cp-visually-hidden">日</span><select id="birthday-day" aria-label="誕生日の日"></select></label>
+                </div>
+                <button class="cp-button cp-button--primary cp-button--full" type="button" id="birthday-search">選手を探す</button>
+                <p class="cp-input-note">生年月日全体ではなく、月日だけを使って検索します。</p>
+              </div>
+              <aside class="cp-search-aside" aria-label="誕生日検索で見つかること">
+                <span class="cp-search-aside__number">01</span>
+                <strong>同じ誕生日</strong>
+                <span>ぴったり同じ日なら、最初に表示します。</span>
+                <strong>同じ誕生月</strong>
+                <span>完全一致がなくても、同じ月の選手へつなげます。</span>
+                <strong>近いホームゲーム</strong>
+                <span>誕生日を観戦のきっかけに変えます。</span>
+              </aside>
+            </div>
+          </section>
+
+          <section class="cp-panel" id="panel-birthplace" role="tabpanel" aria-labelledby="tab-birthplace" hidden data-panel="birthplace">
+            <div class="cp-map-header">
+              <div>
+                <div class="cp-search-card__topline"><span class="cp-mini-icon" data-icon="pin" aria-hidden="true"></span> BIRTHPLACE</div>
+                <h3>出身地から、今季のレッズをのぞいてみよう</h3>
+                <p>赤が濃いほど、出身選手が多い都道府県です。地図の丸印、地域ボタン、都道府県リストのどこからでも選べます。</p>
+              </div>
+              <button class="cp-text-button" type="button" id="show-overseas">海外出身の選手を見る <span aria-hidden="true">→</span></button>
+            </div>
+
+            <div class="cp-map-layout">
+              <div class="cp-map-frame">
+                <div class="cp-map-legend" aria-label="ヒートマップの凡例">
+                  <span><i class="is-zero"></i> 0人</span><span><i class="is-one"></i> 1人</span><span><i class="is-two"></i> 2人</span><span><i class="is-three"></i> 3人以上</span>
+                </div>
+                <div class="cp-japan-map" id="japan-map" aria-label="都道府県を選ぶ地図"></div>
+                <p class="cp-map-caption">地図の操作が難しい場合は、下の地域ボタンから選べます。</p>
+              </div>
+              <div class="cp-map-selection" id="map-selection" aria-live="polite">
+                <div class="cp-selection-placeholder">
+                  <span class="cp-selection-placeholder__ring" aria-hidden="true"></span>
+                  <p>気になる都道府県を<br />選んでください。</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="cp-region-selector" id="region-selector" aria-label="地域から都道府県を選ぶ"></div>
+          </section>
+
+          <section class="cp-panel" id="panel-generation" role="tabpanel" aria-labelledby="tab-generation" hidden data-panel="generation">
+            <div class="cp-search-layout cp-search-layout--generation">
+              <div class="cp-search-card">
+                <div class="cp-search-card__topline"><span class="cp-mini-icon" data-icon="rings" aria-hidden="true"></span> GENERATION</div>
+                <h3>あなたの生まれ年を選んでください</h3>
+                <p>同じ生まれ年を優先して、いない場合は前後の世代から選手を見つけます。</p>
+                <label class="cp-select-wrap cp-select-wrap--wide"><span class="cp-visually-hidden">生まれ年</span><select id="generation-year" aria-label="生まれ年"></select></label>
+                <button class="cp-button cp-button--primary cp-button--full" type="button" id="generation-search">選手を探す</button>
+                <p class="cp-input-note">年齢ではなく、生まれ年で判定します。</p>
+              </div>
+              <aside class="cp-generation-wall" aria-hidden="true">
+                <span>1980s</span><span>1990s</span><span>2000s</span><span>2010s</span>
+              </aside>
+            </div>
+          </section>
+        </div>
+
+        <section class="cp-results" id="results" aria-live="polite" aria-labelledby="results-title">
+          <div class="cp-results__empty" id="initial-result">
+            <img src="assets/illustrations/common-player-empty-state.svg" alt="" />
+            <div>
+              <p class="cp-kicker cp-kicker--dark">READY</p>
+              <h2 id="results-title">共通点を選んで、<br />選手を見つけよう。</h2>
+              <p>検索すると、ここにあなたとつながる選手が表示されます。</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="cp-all-players" id="all-players" aria-labelledby="all-players-title">
+      <div class="cp-shell">
+        <div class="cp-all-players__header">
+          <div>
+            <p class="cp-kicker cp-kicker--dark">FULL SQUAD</p>
+            <h2 id="all-players-title">今季のトップチーム</h2>
+          </div>
+          <p>検索結果だけでなく、気になる選手を一覧からも見つけられます。</p>
+        </div>
+        <div class="cp-position-filter" id="position-filter" aria-label="ポジションで絞り込む"></div>
+        <div class="cp-player-grid cp-player-grid--all" id="all-players-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="cp-footer">
+    <div class="cp-shell cp-footer__inner">
+      <p>Data source: URAWA RED DIAMONDS OFFICIAL WEBSITE / last reviewed 2026.07.07</p>
+      <p>Prototype page. Match dates are demo data and must be replaced with official information before public release.</p>
+    </div>
+  </footer>
+
+  <template id="player-card-template">
+    <article class="cp-player-card">
+      <div class="cp-player-card__visual" aria-hidden="true"><span class="cp-player-card__number"></span><span class="cp-player-card__pos"></span></div>
+      <div class="cp-player-card__body">
+        <span class="cp-player-card__reason"></span>
+        <h3></h3>
+        <p class="cp-player-card__meta"></p>
+        <a class="cp-player-card__link" target="_blank" rel="noopener noreferrer">公式プロフィールを見る <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>
+  </template>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
