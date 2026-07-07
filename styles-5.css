@@ -1,0 +1,37 @@
+@media (max-width: 860px) {
+  :root { --cp-shell: min(100% - 28px, 680px); }
+  .cp-header-link { display: none; }
+  .cp-hero { min-height: 580px; }
+  .cp-hero::after { background: linear-gradient(180deg, rgba(18,18,18,.84) 0%, rgba(18,18,18,.74) 52%, rgba(18,18,18,.22) 100%); }
+  .cp-hero__inner { padding-block: 82px 90px; }
+  .cp-section-heading { display: block; }
+  .cp-section-heading p:not(.cp-kicker) { margin: 16px 0 0; }
+  .cp-map-header { display: block; }.cp-text-button { margin-top: 6px; }
+  .cp-map-layout { grid-template-columns: 1fr; }.cp-map-selection { min-height: 290px; }
+  .cp-region-selector { display: block; }.cp-region-group { display: grid; grid-template-columns: 90px 1fr; gap: 8px; margin-top: 8px; }.cp-region-label, .cp-region-prefectures { grid-column: auto; }.cp-region-label { display: grid; place-items: center; }.cp-region-prefectures { display: flex; }
+  .cp-player-grid--all { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 620px) {
+  :root { --cp-shell: calc(100vw - 28px); }
+  .cp-mobile-only { display: inline; }
+  .cp-site-header__inner { min-height: 56px; }
+  .cp-hero { min-height: 560px; }.cp-hero__inner { padding-block: 68px 70px; }
+  .cp-hero h1 { font-size: 47px; }.cp-hero__lead { font-size: 15px; }.cp-hero__actions { display: grid; grid-template-columns: 1fr; width: min(100%, 320px); }
+  .cp-notice__inner { align-items: flex-start; }.cp-notice p { line-height: 1.6; }
+  .cp-finder { padding-block: 64px 72px; background: #fff; }.cp-section-heading h2 { font-size: 31px; }
+  .cp-tabs { grid-template-columns: 1fr; border: 1px solid var(--cp-line); }.cp-tab, .cp-tab:first-child { min-height: 54px; border: 0; border-bottom: 1px solid var(--cp-line); justify-content: flex-start; padding-inline: 16px; }.cp-tab:last-child { border-bottom: 0; }
+  .cp-panel { padding: 16px; border-top: 0; }.cp-search-layout { grid-template-columns: 1fr; }.cp-search-aside { display: none; }.cp-search-card { padding: 20px; }.cp-search-card h3, .cp-map-header h3 { font-size: 22px; }.cp-generation-wall { display: none; }
+  .cp-map-frame { padding: 12px; }.cp-japan-map { aspect-ratio: 1 / 1.15; }.cp-pref-dot { width: 16px; height: 16px; }
+  .cp-map-selection { padding: 22px; min-height: 250px; }.cp-region-group { grid-template-columns: 74px 1fr; }.cp-region-label { font-size: 10px; }.cp-pref-button { font-size: 11px; }
+  .cp-results { margin-top: 30px; }.cp-results__empty, .cp-empty-result { min-height: 0; padding: 20px; display: block; }.cp-results__empty img, .cp-empty-result img { width: 210px; margin: 0 auto 15px; }.cp-results__empty h2, .cp-empty-result h2 { font-size: 26px; }.cp-result-head { display: block; }.cp-result-head p:not(.cp-kicker) { margin-top: 10px; }.cp-player-grid, .cp-player-grid--all { grid-template-columns: repeat(2, 1fr); gap: 10px; }.cp-player-card__visual { min-height: 110px; padding: 12px; }.cp-player-card__number { font-size: 48px; }.cp-player-card__body { padding: 12px; }.cp-player-card h3 { font-size: 17px; }.cp-player-card__link { font-size: 10px; }.cp-game-card { min-height: 275px; padding: 20px; }.cp-game-card h3 { font-size: 26px; }.cp-game-card__actions { display: grid; grid-template-columns: 1fr; }
+  .cp-all-players { padding-block: 64px; }.cp-all-players__header { display: block; }.cp-all-players__header > p { margin-top: 12px; }.cp-footer__inner { display: block; }.cp-footer p + p { margin-top: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+.cp-japan-map__silhouette { position:absolute; inset: 4% 3% 2% 3%; width:94%; height:94%; opacity:.95; }
+.cp-japan-map__silhouette .land { fill:#d8d4cf; stroke:#fff; stroke-width:1.5; }
+.cp-japan-map__silhouette .land--soft { fill:#e2ded9; }
+.cp-demo-label { display: inline-flex; align-items: center; margin-left: .45rem; padding: .17rem .42rem; border-radius: 999px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.42); font-size: .55rem; letter-spacing: .12em; vertical-align: middle; }
+.cp-game-card__note { margin-top: .65rem !important; font-size: .75rem; line-height: 1.55; opacity: .82; }
