@@ -1,0 +1,33 @@
+export const players = [
+  {id:540, number:1, position:'GK', name:'西川 周作', birthDate:'1986-06-18', birthplace:'大分県宇佐市', prefecture:'大分県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=540'},
+  {id:553, number:23, position:'GK', name:'福井 光輝', birthDate:'1995-11-04', birthplace:'神奈川県', prefecture:'神奈川県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=553'},
+  {id:566, number:44, position:'GK', name:'新井 栄聡', birthDate:'1995-09-27', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=566'},
+  {id:541, number:2, position:'DF', name:'宮本 優太', birthDate:'1999-12-15', birthplace:'東京都', prefecture:'東京都', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=541'},
+  {id:542, number:3, position:'DF', name:'ダニーロ ボザ', birthDate:'1998-05-06', birthplace:'ブラジル', prefecture:null, country:'ブラジル', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=542'},
+  {id:543, number:5, position:'DF', name:'根本 健太', birthDate:'2002-12-13', birthplace:'千葉県', prefecture:'千葉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=543'},
+  {id:549, number:15, position:'DF', name:'工藤 孝太', birthDate:'2003-08-13', birthplace:'和歌山県', prefecture:'和歌山県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=549'},
+  {id:551, number:18, position:'DF', name:'林 幸多郎', birthDate:'2000-11-16', birthplace:'佐賀県', prefecture:'佐賀県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=551'},
+  {id:555, number:26, position:'DF', name:'荻原 拓也', birthDate:'1999-11-23', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=555'},
+  {id:556, number:28, position:'DF', name:'田中 義峯', birthDate:'2008-04-05', birthplace:'福岡県', prefecture:'福岡県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=556'},
+  {id:558, number:32, position:'DF', name:'片山 瑛一', birthDate:'1991-11-30', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=558'},
+  {id:563, number:40, position:'DF', name:'ルカ ディドゥリカ', birthDate:'2007-09-18', birthplace:'オーストラリア', prefecture:null, country:'オーストラリア', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=563'},
+  {id:544, number:7, position:'MF', name:'金子 拓郎', birthDate:'1997-07-30', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=544'},
+  {id:545, number:8, position:'MF', name:'水沼 宏太', birthDate:'1990-02-22', birthplace:'神奈川県', prefecture:'神奈川県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=545'},
+  {id:546, number:10, position:'MF', name:'マテウス サヴィオ', birthDate:'1997-04-15', birthplace:'ブラジル', prefecture:null, country:'ブラジル', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=546'},
+  {id:547, number:11, position:'MF', name:'サミュエル グスタフソン', birthDate:'1995-01-11', birthplace:'スウェーデン', prefecture:null, country:'スウェーデン', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=547'},
+  {id:548, number:13, position:'MF', name:'渡邊 凌磨', birthDate:'1996-10-02', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=548'},
+  {id:552, number:22, position:'MF', name:'柴戸 海', birthDate:'1995-11-24', birthplace:'神奈川県', prefecture:'神奈川県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=552'},
+  {id:554, number:25, position:'MF', name:'安居 海渡', birthDate:'2000-02-09', birthplace:'兵庫県', prefecture:'兵庫県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=554'},
+  {id:557, number:29, position:'MF', name:'堀内 陽太', birthDate:'2004-07-08', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=557'},
+  {id:559, number:33, position:'MF', name:'笹 修大', birthDate:'2006-08-31', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=559'},
+  {id:560, number:37, position:'MF', name:'植木 颯', birthDate:'2003-10-11', birthplace:'東京都', prefecture:'東京都', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=560'},
+  {id:562, number:39, position:'MF', name:'早川 隼平', birthDate:'2005-12-05', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=562'},
+  {id:565, number:43, position:'MF', name:'和田 武士', birthDate:'2009-06-05', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=565'},
+  {id:568, number:88, position:'MF', name:'長沼 洋一', birthDate:'1997-04-14', birthplace:'福岡県', prefecture:'福岡県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=568'},
+  {id:550, number:17, position:'FW', name:'小森 飛絢', birthDate:'2000-08-06', birthplace:'千葉県', prefecture:'千葉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=550'},
+  {id:561, number:36, position:'FW', name:'肥田野 蓮治', birthDate:'2003-12-01', birthplace:'東京都', prefecture:'東京都', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=561'},
+  {id:564, number:42, position:'FW', name:'南野 遥海', birthDate:'2004-05-13', birthplace:'大阪府', prefecture:'大阪府', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=564'},
+  {id:567, number:45, position:'FW', name:'オナイウ 阿道', birthDate:'1995-11-08', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=567'}
+];
+
+export const verifiedAt = '2026-07-07';
