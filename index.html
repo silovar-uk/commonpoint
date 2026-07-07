@@ -6,6 +6,14 @@
   <meta name="description" content="初めて観戦ガイドの中段に差し込む「あなたとつながる選手を見つけよう」コンポーネントのプレビュー。" />
   <title>共通点選手パーツ | 初めて観戦ガイド プレビュー</title>
   <link rel="stylesheet" href="component/common-point.css" />
+  <style>
+    .cp-visually-hidden { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important; }
+    .cp-guide-player__panel[aria-hidden="true"] { visibility:hidden; }
+    [data-cp-regions] { gap:6px; }
+    [data-cp-regions] button { min-height:30px; padding:5px 8px; color:#4d4a47; background:#fff; border:1px solid #d8d2cc; font-size:11px; font-weight:800; }
+    [data-cp-regions] button:hover, [data-cp-regions] button:focus-visible { color:#fff; background:#e60012; border-color:#e60012; }
+    [data-cp-regions] button span { display:inline-grid; min-width:15px; place-items:center; margin-left:3px; color:#e60012; background:#fff0f1; border-radius:99px; font-size:9px; }
+  </style>
 </head>
 <body>
   <div class="cp-preview">
