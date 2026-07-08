@@ -23,6 +23,7 @@ const dateParts = (value) => {
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[character]));
 const heatClass = (count) => (count >= 3 ? 'is-three' : count === 2 ? 'is-two' : count === 1 ? 'is-one' : '');
+const isMascot = (entry) => entry.type === 'mascot';
 
 class CommonPointFinder {
   constructor(root, index) {
@@ -166,7 +167,7 @@ class CommonPointFinder {
   }
 
   getActivePlayers() {
-    return [...this.activePlayers].sort((a, b) => (a.displayRank ?? 999) - (b.displayRank ?? 999) || a.number - b.number || a.name.localeCompare(b.name, 'ja'));
+    return [...this.activePlayers].sort((a, b) => (a.displayRank ?? 999) - (b.displayRank ?? 999) || Number(a.number) - Number(b.number) || a.name.localeCompare(b.name, 'ja'));
   }
 
   trimEntries(entries) {
@@ -176,12 +177,12 @@ class CommonPointFinder {
   searchBirthday() {
     const month = Number(this.cache.month.value);
     if (!month) {
-      this.renderEmpty('誕生月を選んでください。', '月を選ぶと、同じ誕生月の選手を表示します。', 'birthday');
+      this.renderEmpty('誕生月を選んでください。', '月を選ぶと、同じ誕生月の選手・マスコットを表示します。', 'birthday');
       return;
     }
     const sameMonth = this.activePlayers.filter((player) => dateParts(player.birthDate).month === month);
     if (!sameMonth.length) {
-      this.renderEmpty(`${month}月生まれの選手は見つかりませんでした。`, '出身地や世代からも、あなたとつながる選手を探せます。', 'birthplace');
+      this.renderEmpty(`${month}月生まれの選手・マスコットは見つかりませんでした。`, '出身地や世代からも、あなたとつながる存在を探せます。', 'birthplace');
       this.emit('cp_search_execute', { mode: 'birthmonth' });
       this.emit('cp_result_view', { mode: 'birthmonth', result_type: 'empty', result_count_bucket: '0' });
       return;
@@ -189,8 +190,8 @@ class CommonPointFinder {
     const entries = this.trimEntries(sameMonth);
     this.renderResults({
       kicker: 'BIRTH MONTH MATCH',
-      title: `あなたと同じ${month}月生まれの選手`,
-      description: '同じ誕生月から、応援したい選手を見つけられます。',
+      title: `あなたと同じ${month}月生まれの選手・マスコット`,
+      description: '同じ誕生月から、気になる選手やクラブマスコットを見つけられます。',
       entries,
       reason: `あなたと同じ${month}月生まれ`,
       match: null
@@ -208,7 +209,7 @@ class CommonPointFinder {
 
     if (value.startsWith('country:')) {
       const country = value.replace('country:', '');
-      const entries = this.activePlayers.filter((player) => !player.prefecture && player.country === country);
+      const entries = this.activePlayers.filter((player) => !isMascot(player) && !player.prefecture && player.country === country);
       this.state.selectedPrefecture = value;
       this.highlightMap();
       if (!entries.length) {
@@ -256,7 +257,7 @@ class CommonPointFinder {
   searchGeneration() {
     const year = Number(this.cache.year.value);
     if (!year) {
-      this.renderEmpty('生まれ年を選んでください。', '同じ生まれ年、近い世代の選手を探せます。', 'generation');
+      this.renderEmpty('生まれ年を選んでください。', '同じ生まれ年、近い世代の選手・マスコットを探せます。', 'generation');
       return;
     }
     const exact = this.activePlayers.filter((player) => dateParts(player.birthDate).year === year);
@@ -265,18 +266,18 @@ class CommonPointFinder {
     const sameDecade = this.activePlayers.filter((player) => Math.floor(dateParts(player.birthDate).year / 10) * 10 === decade);
     const selected = exact.length ? exact : near.length ? near : sameDecade;
     if (!selected.length) {
-      this.renderEmpty('近い世代の選手は見つかりませんでした。', '誕生月や出身地からも、選手を探せます。', 'birthday');
+      this.renderEmpty('近い世代の選手・マスコットは見つかりませんでした。', '誕生月や出身地からも探せます。', 'birthday');
       this.emit('cp_search_execute', { mode: 'generation' });
       this.emit('cp_result_view', { mode: 'generation', result_type: 'empty', result_count_bucket: '0' });
       return;
     }
     const resultType = exact.length ? 'exact' : 'broadened';
-    const title = exact.length ? `あなたと同じ${year}年生まれの選手` : near.length ? 'あなたと近い世代の選手' : `あなたと同じ${decade}年代生まれの選手`;
+    const title = exact.length ? `あなたと同じ${year}年生まれの選手・マスコット` : near.length ? 'あなたと近い世代の選手・マスコット' : `あなたと同じ${decade}年代生まれの選手・マスコット`;
     const entries = this.trimEntries(selected);
     this.renderResults({
       kicker: 'GENERATION MATCH',
       title,
-      description: `${year}年を起点に、今季の選手を表示しています。`,
+      description: `${year}年を起点に、今季の選手・クラブマスコットを表示しています。`,
       entries,
       reason: (player) => dateParts(player.birthDate).year === year ? `あなたと同じ${year}年生まれ` : 'あなたと近い世代'
     });
@@ -285,9 +286,9 @@ class CommonPointFinder {
   }
 
   showOverseas() {
-    const entries = this.activePlayers.filter((player) => !player.prefecture);
+    const entries = this.activePlayers.filter((player) => !isMascot(player) && !player.prefecture);
     if (!entries.length) {
-      this.renderEmpty('海外出身の選手は見つかりませんでした。', '別の共通点から、気になる選手を探してみよう。', 'birthplace');
+      this.renderEmpty('海外出身の選手は見つかりませんでした。', '別の共通点から、気になる選手やマスコットを探してみよう。', 'birthplace');
       return;
     }
     this.renderResults({
@@ -349,14 +350,14 @@ class CommonPointFinder {
 
   prefectureCounts() {
     return this.activePlayers.reduce((all, player) => {
-      if (player.prefecture) all[player.prefecture] = (all[player.prefecture] || 0) + 1;
+      if (!isMascot(player) && player.prefecture) all[player.prefecture] = (all[player.prefecture] || 0) + 1;
       return all;
     }, {});
   }
 
   countryCounts() {
     return this.activePlayers.reduce((all, player) => {
-      if (!player.prefecture && player.country) all[player.country] = (all[player.country] || 0) + 1;
+      if (!isMascot(player) && !player.prefecture && player.country) all[player.country] = (all[player.country] || 0) + 1;
       return all;
     }, {});
   }
@@ -367,7 +368,8 @@ class CommonPointFinder {
 
   renderResults({ kicker, title, description, entries, reason, match = null }) {
     const cards = entries.map((player) => this.playerCard(player, typeof reason === 'function' ? reason(player) : reason)).join('');
-    this.cache.results.innerHTML = `<div class="cp-guide-player__result-shell"><div class="cp-guide-player__result-head" tabindex="-1"><div><p class="cp-guide-player__result-kicker">${escapeHtml(kicker)}</p><h4>${escapeHtml(title)}</h4></div><p>${escapeHtml(description)}</p></div><div class="cp-guide-player__cards ${this.state.hasRenderedResults ? '' : 'is-animated'}">${cards}</div>${entries.length >= this.maxResults ? `<a class="cp-guide-player__more-link" href="${escapeHtml(this.topTeamUrl)}" data-cp-topteam-link>ほかの選手はトップチーム一覧で見る</a>` : ''}${match ? this.matchCard(match) : ''}</div>`;
+    const moreText = entries.some(isMascot) ? 'ほかの選手はトップチーム一覧で見る' : 'ほかの選手はトップチーム一覧で見る';
+    this.cache.results.innerHTML = `<div class="cp-guide-player__result-shell"><div class="cp-guide-player__result-head" tabindex="-1"><div><p class="cp-guide-player__result-kicker">${escapeHtml(kicker)}</p><h4>${escapeHtml(title)}</h4></div><p>${escapeHtml(description)}</p></div><div class="cp-guide-player__cards ${this.state.hasRenderedResults ? '' : 'is-animated'}">${cards}</div>${entries.length >= this.maxResults ? `<a class="cp-guide-player__more-link" href="${escapeHtml(this.topTeamUrl)}" data-cp-topteam-link>${moreText}</a>` : ''}${match ? this.matchCard(match) : ''}</div>`;
     this.state.hasRenderedResults = true;
     const head = this.cache.results.querySelector('.cp-guide-player__result-head');
     head.focus({ preventScroll: true });
@@ -380,7 +382,12 @@ class CommonPointFinder {
 
   playerCard(player, reason) {
     const birth = dateParts(player.birthDate);
-    return `<a class="cp-guide-player__player-card" href="${escapeHtml(player.profile)}" data-cp-player-link aria-label="${escapeHtml(player.name)}選手の公式プロフィールを見る"><span class="cp-guide-player__player-number">${String(player.number).padStart(2, '0')}<small>${escapeHtml(player.position)}</small></span><span><span class="cp-guide-player__player-reason">${escapeHtml(reason)}</span><strong class="cp-guide-player__player-name">${escapeHtml(player.name)}</strong><small class="cp-guide-player__player-meta">${escapeHtml(player.position)} / ${birth.year}年${birth.month}月${birth.day}日生まれ</small></span><span class="cp-guide-player__player-arrow" aria-hidden="true">→</span></a>`;
+    const mascot = isMascot(player);
+    const numberLabel = mascot ? 'MASCOT' : String(player.number).padStart(2, '0');
+    const roleLabel = mascot ? 'クラブマスコット' : player.position;
+    const meta = mascot ? `${roleLabel} / ${birth.year}年${birth.month}月${birth.day}日誕生` : `${escapeHtml(player.position)} / ${birth.year}年${birth.month}月${birth.day}日生まれ`;
+    const ariaLabel = mascot ? `${player.name}を見る` : `${player.name}選手の公式プロフィールを見る`;
+    return `<a class="cp-guide-player__player-card${mascot ? ' is-mascot' : ''}" href="${escapeHtml(player.profile)}" data-cp-player-link aria-label="${escapeHtml(ariaLabel)}"><span class="cp-guide-player__player-number">${escapeHtml(numberLabel)}<small>${escapeHtml(roleLabel)}</small></span><span><span class="cp-guide-player__player-reason">${escapeHtml(reason)}</span><strong class="cp-guide-player__player-name">${escapeHtml(player.name)}</strong><small class="cp-guide-player__player-meta">${meta}</small></span><span class="cp-guide-player__player-arrow" aria-hidden="true">→</span></a>`;
   }
 
   renderEmpty(title, description, suggestMode) {
