@@ -16,12 +16,6 @@ const MAP_POINTS = {
   '愛知県': [59, 66]
 };
 
-const icon = {
-  birthday: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M7 3v4M17 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path></svg>',
-  birthplace: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>',
-  generation: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1" fill="currentColor"></circle></svg>'
-};
-
 const dateParts = (value) => {
   const [year, month, day] = String(value).split('-').map(Number);
   return { year, month, day, md: `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` };
@@ -29,7 +23,6 @@ const dateParts = (value) => {
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[character]));
 const heatClass = (count) => (count >= 3 ? 'is-three' : count === 2 ? 'is-two' : count === 1 ? 'is-one' : '');
-const delay = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
 class CommonPointFinder {
   constructor(root, index) {
@@ -42,6 +35,7 @@ class CommonPointFinder {
     this.activePlayers = players.filter((player) => player.isActive !== false && player.birthDate && player.name && player.profile);
     this.state = { activeMode: null, selectedPrefecture: '', hasRenderedResults: false };
     this.cache = {};
+    this.autoSearchTimer = null;
     this.initialize();
   }
 
@@ -64,10 +58,13 @@ class CommonPointFinder {
 
   fillSelects() {
     this.cache.month.innerHTML = '<option value="">月を選ぶ</option>' + Array.from({ length: 12 }, (_, index) => `<option value="${index + 1}">${index + 1}月</option>`).join('');
-    this.cache.day.innerHTML = '<option value="">日を選ぶ</option>' + Array.from({ length: 31 }, (_, index) => `<option value="${index + 1}">${index + 1}日</option>`).join('');
+    this.cache.day.innerHTML = '<option value="">日まで選ぶ</option>' + Array.from({ length: 31 }, (_, index) => `<option value="${index + 1}">${index + 1}日</option>`).join('');
     const years = [...new Set(this.activePlayers.map((player) => dateParts(player.birthDate).year))].sort((a, b) => b - a);
     this.cache.year.innerHTML = '<option value="">生まれ年を選ぶ</option>' + years.map((year) => `<option value="${year}">${year}年</option>`).join('');
-    this.cache.prefecture.innerHTML = '<option value="">都道府県を選ぶ</option>' + PREFECTURES.map(({ code, name }) => `<option value="${code}">${name}</option>`).join('');
+
+    const domesticOptions = PREFECTURES.map(({ code, name }) => `<option value="${code}">${name}</option>`).join('');
+    const countryOptions = this.foreignCountries().map((country) => `<option value="country:${escapeHtml(country)}">${escapeHtml(country)}</option>`).join('');
+    this.cache.prefecture.innerHTML = '<option value="">出身地を選ぶ</option>' + `<optgroup label="日本">${domesticOptions}</optgroup>` + (countryOptions ? `<optgroup label="海外">${countryOptions}</optgroup>` : '');
   }
 
   bind() {
@@ -75,19 +72,38 @@ class CommonPointFinder {
     this.root.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.state.activeMode) this.closeMode();
     });
-    this.cache.month.addEventListener('change', () => this.updateDayOptions());
-    this.root.querySelector('[data-cp-action="birthday-search"]').addEventListener('click', () => this.searchBirthday());
-    this.root.querySelector('[data-cp-action="birthplace-search"]').addEventListener('click', () => this.searchBirthplace());
-    this.root.querySelector('[data-cp-action="generation-search"]').addEventListener('click', () => this.searchGeneration());
-    this.root.querySelector('[data-cp-action="overseas"]').addEventListener('click', () => this.showOverseas());
+    this.cache.month.addEventListener('change', () => {
+      this.updateDayOptions();
+      if (this.cache.month.value) this.queueAutoSearch('birthday');
+    });
+    this.cache.day.addEventListener('change', () => {
+      if (this.cache.month.value) this.queueAutoSearch('birthday');
+    });
     this.cache.prefecture.addEventListener('change', () => {
       this.state.selectedPrefecture = this.cache.prefecture.value;
       this.highlightMap();
+      if (this.cache.prefecture.value) this.queueAutoSearch('birthplace');
     });
+    this.cache.year.addEventListener('change', () => {
+      if (this.cache.year.value) this.queueAutoSearch('generation');
+    });
+    this.root.querySelector('[data-cp-action="birthday-search"]')?.addEventListener('click', () => this.searchBirthday());
+    this.root.querySelector('[data-cp-action="birthplace-search"]')?.addEventListener('click', () => this.searchBirthplace());
+    this.root.querySelector('[data-cp-action="generation-search"]')?.addEventListener('click', () => this.searchGeneration());
+    this.root.querySelector('[data-cp-action="overseas"]')?.addEventListener('click', () => this.showOverseas());
     this.root.addEventListener('click', (event) => {
       const modeButton = event.target.closest('[data-cp-suggest-mode]');
       if (modeButton) this.toggleMode(modeButton.dataset.cpSuggestMode);
     });
+  }
+
+  queueAutoSearch(mode) {
+    window.clearTimeout(this.autoSearchTimer);
+    this.autoSearchTimer = window.setTimeout(() => {
+      if (mode === 'birthday') this.searchBirthday({ automatic: true });
+      if (mode === 'birthplace') this.searchBirthplace({ automatic: true });
+      if (mode === 'generation') this.searchGeneration({ automatic: true });
+    }, 80);
   }
 
   setupEntranceMotion() {
@@ -177,17 +193,17 @@ class CommonPointFinder {
   searchBirthday() {
     const month = Number(this.cache.month.value);
     const day = Number(this.cache.day.value);
-    if (!month || !day) {
-      this.renderEmpty('月と日を選んでください。', '誕生日の月と日を選ぶと、同じ誕生日や同じ月の選手を探せます。', 'birthday');
+    if (!month) {
+      this.renderEmpty('誕生月を選んでください。', '月を選ぶだけで、同じ誕生月の選手を表示します。日まで選ぶと、同じ誕生日の選手を優先します。', 'birthday');
       return;
     }
-    const exactKey = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    const exact = this.activePlayers.filter((player) => dateParts(player.birthDate).md === exactKey);
+    const exactKey = day ? `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` : '';
+    const exact = day ? this.activePlayers.filter((player) => dateParts(player.birthDate).md === exactKey) : [];
     const sameMonth = this.activePlayers.filter((player) => dateParts(player.birthDate).month === month);
-    const result = exact.length ? exact : sameMonth;
-    const isExact = Boolean(exact.length);
+    const isExact = Boolean(day && exact.length);
+    const result = isExact ? exact : sameMonth;
     if (!result.length) {
-      this.renderEmpty('同じ誕生日・誕生月の選手は見つかりませんでした。', '出身地や世代からも、あなたとつながる選手を探せます。', 'birthplace');
+      this.renderEmpty(`${month}月生まれの選手は見つかりませんでした。`, '出身地や世代からも、あなたとつながる選手を探せます。', 'birthplace');
       this.emit('cp_search_execute', { mode: 'birthday' });
       this.emit('cp_result_view', { mode: 'birthday', result_type: 'empty', result_count_bucket: '0' });
       return;
@@ -196,24 +212,50 @@ class CommonPointFinder {
     this.renderResults({
       kicker: isExact ? 'BIRTHDAY MATCH' : 'BIRTH MONTH MATCH',
       title: isExact ? `あなたと同じ${month}月${day}日生まれの選手` : `あなたと同じ${month}月生まれの選手`,
-      description: isExact ? '同じ日が、応援を始める小さなきっかけに。' : '完全一致がなくても、同じ誕生月から選手を見つけられます。',
+      description: isExact ? '同じ日が、応援を始める小さなきっかけに。' : '月を選ぶだけでも、同じ誕生月の選手を見つけられます。',
       entries,
       reason: isExact ? `あなたと同じ${month}月${day}日生まれ` : `あなたと同じ${month}月生まれ`,
-      match: this.matchEnabled ? this.findBirthdayMatch(month, day) : null
+      match: this.matchEnabled && day ? this.findBirthdayMatch(month, day) : null
     });
     this.emit('cp_search_execute', { mode: 'birthday' });
     this.emit('cp_result_view', { mode: 'birthday', result_type: isExact ? 'exact' : 'broadened', result_count_bucket: this.countBucket(entries.length) });
   }
 
   searchBirthplace() {
-    const code = this.cache.prefecture.value;
-    if (!code) {
-      this.renderEmpty('都道府県を選んでください。', '都道府県を選ぶと、同じ出身地の選手を探せます。', 'birthplace');
+    const value = this.cache.prefecture.value;
+    if (!value) {
+      this.renderEmpty('出身地を選んでください。', '日本の都道府県、または海外の出身国を選ぶと、自動で選手を表示します。', 'birthplace');
       return;
     }
-    const prefecture = PREFECTURES.find((item) => item.code === code);
+
+    if (value.startsWith('country:')) {
+      const country = value.replace('country:', '');
+      const entries = this.activePlayers.filter((player) => !player.prefecture && player.country === country);
+      this.state.selectedPrefecture = value;
+      this.highlightMap();
+      if (!entries.length) {
+        this.renderEmpty(`${country}出身の選手は見つかりませんでした。`, '別の出身地や、誕生日・世代から探してみよう。', 'birthplace');
+        this.emit('cp_search_execute', { mode: 'birthplace' });
+        this.emit('cp_result_view', { mode: 'birthplace', result_type: 'empty', result_count_bucket: '0' });
+        return;
+      }
+      const shown = this.trimEntries(entries);
+      this.renderResults({
+        kicker: 'BIRTHPLACE MATCH',
+        title: `${country}出身のレッズ選手`,
+        description: '海外出身の選手も、出身地の入口からそのまま探せます。',
+        entries: shown,
+        reason: `${country}出身`
+      });
+      this.emit('cp_search_execute', { mode: 'birthplace' });
+      this.emit('cp_result_view', { mode: 'birthplace', result_type: 'exact', result_count_bucket: this.countBucket(shown.length) });
+      return;
+    }
+
+    const prefecture = PREFECTURES.find((item) => item.code === value);
+    if (!prefecture) return;
     const entries = this.activePlayers.filter((player) => player.prefecture === prefecture.name);
-    this.state.selectedPrefecture = code;
+    this.state.selectedPrefecture = value;
     this.highlightMap();
     if (!entries.length) {
       this.renderEmpty(`${prefecture.name}出身の選手は見つかりませんでした。`, 'ほかの都道府県や、海外出身の選手も見てみよう。', 'birthplace');
@@ -273,7 +315,7 @@ class CommonPointFinder {
     this.renderResults({
       kicker: 'FROM OVERSEAS',
       title: '海外出身のレッズ選手',
-      description: '世界のさまざまな場所から、レッズに集まる選手たち。',
+      description: '世界のさまざまな場所から、レッズに集まる選手たち。出身地の選択欄から国別にも探せます。',
       entries: this.trimEntries(entries),
       reason: (player) => `${player.country}出身`
     });
@@ -307,13 +349,16 @@ class CommonPointFinder {
 
   renderPrefectureButtons() {
     const counts = this.prefectureCounts();
+    const countryCounts = this.countryCounts();
     const populated = PREFECTURES.filter((prefecture) => counts[prefecture.name]);
-    this.cache.regionButtons.innerHTML = populated.map((prefecture) => `<button type="button" data-cp-prefecture-button="${prefecture.code}">${escapeHtml(prefecture.name)} <span>${counts[prefecture.name]}</span></button>`).join('');
+    const domesticButtons = populated.map((prefecture) => `<button type="button" data-cp-prefecture-button="${prefecture.code}">${escapeHtml(prefecture.name)} <span>${counts[prefecture.name]}</span></button>`).join('');
+    const countryButtons = Object.entries(countryCounts).map(([country, count]) => `<button type="button" class="is-country" data-cp-prefecture-button="country:${escapeHtml(country)}">${escapeHtml(country)} <span>${count}</span></button>`).join('');
+    this.cache.regionButtons.innerHTML = domesticButtons + countryButtons;
     this.cache.regionButtons.querySelectorAll('[data-cp-prefecture-button]').forEach((button) => {
       button.addEventListener('click', () => {
-        const code = button.dataset.cpPrefectureButton;
-        this.cache.prefecture.value = code;
-        this.state.selectedPrefecture = code;
+        const value = button.dataset.cpPrefectureButton;
+        this.cache.prefecture.value = value;
+        this.state.selectedPrefecture = value;
         this.highlightMap();
         this.searchBirthplace();
       });
@@ -329,6 +374,17 @@ class CommonPointFinder {
       if (player.prefecture) all[player.prefecture] = (all[player.prefecture] || 0) + 1;
       return all;
     }, {});
+  }
+
+  countryCounts() {
+    return this.activePlayers.reduce((all, player) => {
+      if (!player.prefecture && player.country) all[player.country] = (all[player.country] || 0) + 1;
+      return all;
+    }, {});
+  }
+
+  foreignCountries() {
+    return Object.keys(this.countryCounts()).sort((a, b) => a.localeCompare(b, 'ja'));
   }
 
   renderResults({ kicker, title, description, entries, reason, match = null }) {
