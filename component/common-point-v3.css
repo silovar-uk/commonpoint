@@ -1,0 +1,40 @@
+.cp-guide-player__auto-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 10px 0 0;
+  color: #625f5b;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cp-guide-player__auto-note::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cp-red);
+  box-shadow: 0 0 0 5px #fff0f1;
+}
+
+[data-cp-regions] button.is-country {
+  border-color: #1f1f1f;
+  color: #fff;
+  background: #1f1f1f;
+}
+
+[data-cp-regions] button.is-country:hover,
+[data-cp-regions] button.is-country:focus-visible {
+  border-color: var(--cp-red);
+  background: var(--cp-red);
+}
+
+[data-cp-regions] button.is-country span {
+  color: #1f1f1f;
+  background: #fff;
+}
+
+.cp-guide-player__select optgroup {
+  color: #555;
+  font-weight: 900;
+}
