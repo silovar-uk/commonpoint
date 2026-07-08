@@ -27,7 +27,10 @@ export const players = [
   {id:550, number:17, position:'FW', name:'小森 飛絢', birthDate:'2000-08-06', birthplace:'千葉県', prefecture:'千葉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=550'},
   {id:561, number:36, position:'FW', name:'肥田野 蓮治', birthDate:'2003-12-01', birthplace:'東京都', prefecture:'東京都', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=561'},
   {id:564, number:42, position:'FW', name:'南野 遥海', birthDate:'2004-05-13', birthplace:'大阪府', prefecture:'大阪府', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=564'},
-  {id:567, number:45, position:'FW', name:'オナイウ 阿道', birthDate:'1995-11-08', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=567'}
+  {id:567, number:45, position:'FW', name:'オナイウ 阿道', birthDate:'1995-11-08', birthplace:'埼玉県', prefecture:'埼玉県', country:'日本', profile:'https://www.urawa-reds.co.jp/topteam/detail/?id=567'},
+  {id:'mascot-redia', type:'mascot', number:'REDIA', position:'MASCOT', name:'レディア', birthDate:'1992-03-31', birthplace:'クラブマスコット', prefecture:null, country:'日本', profile:'https://www.urawa-reds.co.jp/', displayRank:901},
+  {id:'mascot-schale', type:'mascot', number:'SCHALE', position:'MASCOT', name:'シャーレくん', birthDate:'2006-12-02', birthplace:'クラブマスコット', prefecture:null, country:'日本', profile:'https://www.urawa-reds.co.jp/', displayRank:902},
+  {id:'mascot-diara', type:'mascot', number:'DIARA', position:'MASCOT', name:'ディアラちゃん', birthDate:'2006-12-02', birthplace:'クラブマスコット', prefecture:null, country:'日本', profile:'https://www.urawa-reds.co.jp/', displayRank:903}
 ];
 
-export const verifiedAt = '2026-07-07';
+export const verifiedAt = '2026-07-08';
