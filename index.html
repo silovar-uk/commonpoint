@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="初めて観戦ガイドの中段に差し込む「あなたとつながる選手を見つけよう」コンポーネントのプレビュー。" />
-  <title>共通点選手パーツ | 初めて観戦ガイド プレビュー</title>
+  <meta name="description" content="初めて観戦ガイドの中段に差し込む「あなたのレッズ接点を見つけよう」コンポーネントのプレビュー。" />
+  <title>レッズ接点チェック | 初めて観戦ガイド プレビュー</title>
   <link rel="stylesheet" href="component/common-point.css" />
   <link rel="stylesheet" href="component/common-point-v2.css" />
   <link rel="stylesheet" href="component/common-point-v3.css" />
@@ -27,7 +27,7 @@
       <div class="cp-preview-section__inner">
         <p class="cp-preview-section__label">GAME</p>
         <h1 class="cp-preview-section__title" id="preview-game-title">最高の“非日常”空間を楽しもう！</h1>
-        <p class="cp-preview-section__copy">スタジアムが一体となって生み出される、浦和レッズのホームゲーム。映像や写真で雰囲気をのぞいたあと、応援したい選手を見つける小さな寄り道です。</p>
+        <p class="cp-preview-section__copy">スタジアムが一体となって生み出される、浦和レッズのホームゲーム。映像や写真で雰囲気をのぞいたあと、レッズとの小さな接点を見つける寄り道です。</p>
         <div class="cp-preview-gallery" aria-hidden="true"><span></span><span></span><span></span></div>
       </div>
     </section>
@@ -35,30 +35,30 @@
     <section class="cp-guide-player js-common-point" data-cp-topteam-url="https://www.urawa-reds.co.jp/topteam/" data-cp-max-results="3" data-cp-match-enabled="true" aria-labelledby="cp-guide-player-title">
       <div class="cp-guide-player__inner">
         <header class="cp-guide-player__header">
-          <p class="cp-guide-player__eyebrow">FIND YOUR PLAYER</p>
-          <h3 id="cp-guide-player-title">あなたは、どこで<br />レッズとつながる？</h3>
-          <p class="cp-guide-player__lead">誕生月、出身地、世代。あなたらしい入口から、気になる選手を見つけよう。</p>
+          <p class="cp-guide-player__eyebrow">FIND YOUR REDS LINK</p>
+          <h3 id="cp-guide-player-title">あなたのレッズ接点を<br />見つけよう</h3>
+          <p class="cp-guide-player__lead">誕生月、出身地、世代。ちょっとした共通点から、気になる選手やクラブマスコットが見つかるかも。</p>
         </header>
 
-        <div class="cp-guide-player__choices" aria-label="選手の探し方">
+        <div class="cp-guide-player__choices" aria-label="レッズとの接点の見つけ方">
           <button type="button" class="cp-guide-player__choice" data-cp-mode="birthday" aria-expanded="false" aria-controls="cp-panel-birthday">
             <span class="cp-guide-player__choice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M7 3v4M17 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path></svg></span>
-            <span class="cp-guide-player__choice-title">誕生月から探す</span>
-            <span class="cp-guide-player__choice-text">同じ月に生まれた選手を探す</span>
+            <span class="cp-guide-player__choice-title">誕生月でつながる</span>
+            <span class="cp-guide-player__choice-text">同じ月に生まれた選手やマスコットを見つけよう</span>
             <span class="cp-guide-player__choice-arrow" aria-hidden="true">→</span>
           </button>
 
           <button type="button" class="cp-guide-player__choice" data-cp-mode="birthplace" aria-expanded="false" aria-controls="cp-panel-birthplace">
             <span class="cp-guide-player__choice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
-            <span class="cp-guide-player__choice-title">出身地から探す</span>
-            <span class="cp-guide-player__choice-text">都道府県や海外の出身国から選手を探す</span>
+            <span class="cp-guide-player__choice-title">出身地でつながる</span>
+            <span class="cp-guide-player__choice-text">地元や国が同じ選手を見つけよう</span>
             <span class="cp-guide-player__choice-arrow" aria-hidden="true">→</span>
           </button>
 
           <button type="button" class="cp-guide-player__choice" data-cp-mode="generation" aria-expanded="false" aria-controls="cp-panel-generation">
             <span class="cp-guide-player__choice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1" fill="currentColor"></circle></svg></span>
-            <span class="cp-guide-player__choice-title">世代から探す</span>
-            <span class="cp-guide-player__choice-text">同じ年、近い世代の選手を探す</span>
+            <span class="cp-guide-player__choice-title">世代でつながる</span>
+            <span class="cp-guide-player__choice-text">同じ時代に生まれた選手やマスコットを見つけよう</span>
             <span class="cp-guide-player__choice-arrow" aria-hidden="true">→</span>
           </button>
         </div>
@@ -68,12 +68,12 @@
             <div class="cp-guide-player__panel-inner">
               <div class="cp-guide-player__panel-card">
                 <div class="cp-guide-player__panel-copy">
-                  <h4>あなたの誕生月を選んでください</h4>
-                  <p>月を選ぶだけで、同じ誕生月の選手を表示します。</p>
+                  <h4>誕生月でつながる</h4>
+                  <p>あなたの誕生月を選ぶだけで、同じ月に生まれた選手やクラブマスコットを表示します。</p>
                   <div class="cp-guide-player__form-row">
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">誕生月</span><select class="cp-guide-player__select" data-cp-month aria-label="誕生月"></select></label>
                   </div>
-                  <p class="cp-guide-player__auto-note">選ぶと自動で、つながる選手を表示します。</p>
+                  <p class="cp-guide-player__auto-note">選ぶと自動で、つながりを表示します。</p>
                 </div>
                 <aside class="cp-guide-player__panel-side" aria-hidden="true"><strong>01</strong><span>SAME BIRTH MONTH</span></aside>
               </div>
@@ -84,7 +84,7 @@
             <div class="cp-guide-player__panel-inner">
               <div class="cp-guide-player__panel-card">
                 <div class="cp-guide-player__panel-copy">
-                  <h4>出身地を選んでください</h4>
+                  <h4>出身地でつながる</h4>
                   <p>都道府県だけでなく、海外の出身国も同じ一覧から選べます。</p>
                   <div class="cp-guide-player__map-area">
                     <div class="cp-guide-player__heatmap" data-cp-map aria-label="出身選手の分布"></div>
@@ -106,12 +106,12 @@
             <div class="cp-guide-player__panel-inner">
               <div class="cp-guide-player__panel-card">
                 <div class="cp-guide-player__panel-copy">
-                  <h4>あなたの生まれ年を選んでください</h4>
-                  <p>同じ生まれ年を優先して、いなければ前後1年、同じ年代の順で選手を探します。</p>
+                  <h4>世代でつながる</h4>
+                  <p>あなたの生まれ年を選ぶと、同じ年や近い世代の選手・クラブマスコットを表示します。</p>
                   <div class="cp-guide-player__form-row">
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">生まれ年</span><select class="cp-guide-player__select" data-cp-year aria-label="生まれ年"></select></label>
                   </div>
-                  <p class="cp-guide-player__auto-note">生まれ年を選ぶと自動で、近い世代の選手を表示します。</p>
+                  <p class="cp-guide-player__auto-note">生まれ年を選ぶと自動で、近い接点を表示します。</p>
                 </div>
                 <aside class="cp-guide-player__panel-side" aria-hidden="true"><strong>03</strong><span>SAME YEAR / SAME ERA</span></aside>
               </div>
@@ -128,7 +128,7 @@
       <div class="cp-preview-section__inner">
         <p class="cp-preview-section__label">GOURMET & GOODS</p>
         <h2 class="cp-preview-section__title" id="preview-gourmet-title">スタジアムでしか味わえない楽しみも。</h2>
-        <p class="cp-preview-section__copy">応援したい選手が見つかったら、グルメやグッズも楽しみながら、キックオフを待とう。</p>
+        <p class="cp-preview-section__copy">気になる選手やマスコットが見つかったら、グルメやグッズも楽しみながら、キックオフを待とう。</p>
       </div>
     </section>
   </main>
