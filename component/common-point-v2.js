@@ -10,11 +10,6 @@ function setRouteState(root) {
   });
 }
 
-function routeLabel(root) {
-  const selected = root.querySelector('.cp-guide-player__choice.is-open .cp-guide-player__choice-title');
-  return selected?.textContent?.replace('から探す', '') || '共通点';
-}
-
 function enhanceResults(root) {
   const results = root.querySelector('[data-cp-results]');
   const shell = results?.querySelector('.cp-guide-player__result-shell');
@@ -30,10 +25,13 @@ function enhanceResults(root) {
   });
 
   const reason = cards[0].querySelector('.cp-guide-player__player-reason')?.textContent?.trim() || '共通点';
+  const hasMascot = cards.some((card) => card.classList.contains('is-mascot'));
   const path = document.createElement('div');
   path.className = 'cp-guide-player__result-path';
-  path.innerHTML = `<span>YOU</span><i aria-hidden="true"></i><strong>${reason}</strong><i aria-hidden="true"></i><b>REDS PLAYER</b>`;
-  shell.insertBefore(path, shell.firstElementChild);
+  path.innerHTML = `<span>YOU</span><i aria-hidden="true"></i><strong>${reason}</strong><i aria-hidden="true"></i><b>${hasMascot ? 'REDS FAMILY' : 'REDS PLAYER'}</b>`;
+  const emotion = shell.querySelector('.cp-guide-player__result-emotion');
+  if (emotion) emotion.insertAdjacentElement('afterend', path);
+  else shell.insertBefore(path, shell.firstElementChild);
 
   if (!reduceMotion()) {
     cards.forEach((card, index) => {
