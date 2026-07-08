@@ -38,3 +38,24 @@
   color: #555;
   font-weight: 900;
 }
+
+.cp-guide-player__player-card.is-mascot .cp-guide-player__player-number {
+  font-size: 15px;
+  letter-spacing: .06em;
+  text-align: center;
+}
+
+.cp-guide-player__player-card.is-mascot .cp-guide-player__player-number small {
+  font-size: 8px;
+  line-height: 1.2;
+}
+
+.cp-guide-player__player-card.is-featured.is-mascot .cp-guide-player__player-number {
+  font-size: 28px;
+  line-height: 1.05;
+}
+
+.cp-guide-player__player-card.is-featured.is-mascot .cp-guide-player__player-number small {
+  margin-top: 9px;
+  font-size: 9px;
+}
