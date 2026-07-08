@@ -191,10 +191,12 @@ class CommonPointFinder {
     this.renderResults({
       kicker: 'BIRTH MONTH MATCH',
       title: `あなたと同じ${month}月生まれの選手・マスコット`,
-      description: '同じ誕生月から、気になる選手やクラブマスコットを見つけられます。',
+      description: this.birthMonthDescription(month, entries),
       entries,
       reason: `あなたと同じ${month}月生まれ`,
-      match: null
+      match: null,
+      mode: 'birthmonth',
+      special: this.mascotBirthMonthMessage(month, entries)
     });
     this.emit('cp_search_execute', { mode: 'birthmonth' });
     this.emit('cp_result_view', { mode: 'birthmonth', result_type: 'exact', result_count_bucket: this.countBucket(entries.length) });
@@ -224,7 +226,8 @@ class CommonPointFinder {
         title: `${country}出身のレッズ選手`,
         description: '海外出身の選手も、出身地の入口からそのまま探せます。',
         entries: shown,
-        reason: `${country}出身`
+        reason: `${country}出身`,
+        mode: 'birthplace'
       });
       this.emit('cp_search_execute', { mode: 'birthplace' });
       this.emit('cp_result_view', { mode: 'birthplace', result_type: 'exact', result_count_bucket: this.countBucket(shown.length) });
@@ -248,7 +251,8 @@ class CommonPointFinder {
       title: `あなたと同じ${prefecture.name}出身の選手`,
       description: `今季は${entries.length}人。地元のつながりから、応援したい選手を見つけよう。`,
       entries: shown,
-      reason: `あなたと同じ${prefecture.name}出身`
+      reason: `あなたと同じ${prefecture.name}出身`,
+      mode: 'birthplace'
     });
     this.emit('cp_search_execute', { mode: 'birthplace' });
     this.emit('cp_result_view', { mode: 'birthplace', result_type: 'exact', result_count_bucket: this.countBucket(shown.length) });
@@ -279,7 +283,8 @@ class CommonPointFinder {
       title,
       description: `${year}年を起点に、今季の選手・クラブマスコットを表示しています。`,
       entries,
-      reason: (player) => dateParts(player.birthDate).year === year ? `あなたと同じ${year}年生まれ` : 'あなたと近い世代'
+      reason: (player) => dateParts(player.birthDate).year === year ? `あなたと同じ${year}年生まれ` : 'あなたと近い世代',
+      mode: 'generation'
     });
     this.emit('cp_search_execute', { mode: 'generation' });
     this.emit('cp_result_view', { mode: 'generation', result_type: resultType, result_count_bucket: this.countBucket(entries.length) });
@@ -296,7 +301,8 @@ class CommonPointFinder {
       title: '海外出身のレッズ選手',
       description: '世界のさまざまな場所から、レッズに集まる選手たち。出身地の選択欄から国別にも探せます。',
       entries: this.trimEntries(entries),
-      reason: (player) => `${player.country}出身`
+      reason: (player) => `${player.country}出身`,
+      mode: 'birthplace'
     });
     this.emit('cp_result_view', { mode: 'birthplace', result_type: 'broadened', result_count_bucket: this.countBucket(entries.length) });
   }
@@ -366,18 +372,44 @@ class CommonPointFinder {
     return Object.keys(this.countryCounts()).sort((a, b) => a.localeCompare(b, 'ja'));
   }
 
-  renderResults({ kicker, title, description, entries, reason, match = null }) {
+  renderResults({ kicker, title, description, entries, reason, match = null, mode = 'default', special = null }) {
     const cards = entries.map((player) => this.playerCard(player, typeof reason === 'function' ? reason(player) : reason)).join('');
-    const moreText = entries.some(isMascot) ? 'ほかの選手はトップチーム一覧で見る' : 'ほかの選手はトップチーム一覧で見る';
-    this.cache.results.innerHTML = `<div class="cp-guide-player__result-shell"><div class="cp-guide-player__result-head" tabindex="-1"><div><p class="cp-guide-player__result-kicker">${escapeHtml(kicker)}</p><h4>${escapeHtml(title)}</h4></div><p>${escapeHtml(description)}</p></div><div class="cp-guide-player__cards ${this.state.hasRenderedResults ? '' : 'is-animated'}">${cards}</div>${entries.length >= this.maxResults ? `<a class="cp-guide-player__more-link" href="${escapeHtml(this.topTeamUrl)}" data-cp-topteam-link>${moreText}</a>` : ''}${match ? this.matchCard(match) : ''}</div>`;
+    const moreText = entries.some(isMascot) ? 'トップチーム一覧で、もっと選手を知る' : 'トップチーム一覧で、もっと選手を知る';
+    const emotion = this.resultEmotion({ mode, entries, title });
+    const specialHtml = special ? `<p class="cp-guide-player__result-special"><span aria-hidden="true">★</span>${escapeHtml(special)}</p>` : '';
+    this.cache.results.innerHTML = `<div class="cp-guide-player__result-shell"><div class="cp-guide-player__result-emotion"><span aria-hidden="true" class="cp-guide-player__sparkle cp-guide-player__sparkle--one"></span><span aria-hidden="true" class="cp-guide-player__sparkle cp-guide-player__sparkle--two"></span><strong>つながり発見！</strong><p>${escapeHtml(emotion)}</p>${specialHtml}</div><div class="cp-guide-player__result-head" tabindex="-1"><div><p class="cp-guide-player__result-kicker">${escapeHtml(kicker)}</p><h4>${escapeHtml(title)}</h4></div><p>${escapeHtml(description)}</p></div><div class="cp-guide-player__cards ${this.state.hasRenderedResults ? '' : 'is-animated'}">${cards}</div>${entries.length >= this.maxResults ? `<a class="cp-guide-player__more-link" href="${escapeHtml(this.topTeamUrl)}" data-cp-topteam-link>${moreText}</a>` : ''}${match ? this.matchCard(match) : ''}</div>`;
     this.state.hasRenderedResults = true;
-    const head = this.cache.results.querySelector('.cp-guide-player__result-head');
-    head.focus({ preventScroll: true });
+    const head = this.cache.results.querySelector('.cp-guide-player__result-emotion');
+    head.focus?.({ preventScroll: true });
     this.cache.results.scrollIntoView({ behavior: this.reduceMotion() ? 'auto' : 'smooth', block: 'nearest' });
     this.cache.results.querySelectorAll('[data-cp-player-link]').forEach((link) => link.addEventListener('click', () => this.emit('cp_player_profile_click')));
     this.cache.results.querySelector('[data-cp-topteam-link]')?.addEventListener('click', () => this.emit('cp_topteam_click'));
     this.cache.results.querySelector('[data-cp-match-link]')?.addEventListener('click', () => this.emit('cp_match_info_click'));
     this.cache.results.querySelector('[data-cp-ticket-link]')?.addEventListener('click', () => this.emit('cp_ticket_click'));
+  }
+
+  resultEmotion({ mode, entries, title }) {
+    const mascotCount = entries.filter(isMascot).length;
+    const playerCount = entries.length - mascotCount;
+    if (mode === 'birthmonth' && mascotCount && playerCount) return `${title}が見つかりました。クラブマスコットも一緒です。`;
+    if (mode === 'birthmonth' && mascotCount) return `${title}が見つかりました。クラブマスコットとの接点です。`;
+    if (mode === 'generation' && mascotCount && playerCount) return `${title}が見つかりました。選手とクラブマスコット、どちらにも接点があります。`;
+    if (mode === 'generation' && mascotCount) return `${title}が見つかりました。クラブマスコットとの接点です。`;
+    return `${title}が見つかりました。`;
+  }
+
+  birthMonthDescription(month, entries) {
+    const names = entries.filter(isMascot).map((entry) => entry.name);
+    if (month === 3 && names.includes('レディア')) return '3月生まれには、クラブマスコットのレディアもいます。';
+    if (month === 12 && names.some((name) => name === 'シャーレくん' || name === 'ディアラちゃん')) return '12月生まれには、シャーレくんとディアラちゃんもいます。';
+    return entries.some(isMascot) ? '同じ誕生月から、気になる選手やクラブマスコットを見つけられます。' : '同じ誕生月から、気になる選手を見つけられます。';
+  }
+
+  mascotBirthMonthMessage(month, entries) {
+    const names = entries.filter(isMascot).map((entry) => entry.name);
+    if (month === 3 && names.includes('レディア')) return 'レディアの誕生月！';
+    if (month === 12 && names.includes('シャーレくん') && names.includes('ディアラちゃん')) return 'シャーレくん・ディアラちゃんの誕生月！';
+    return null;
   }
 
   playerCard(player, reason) {
