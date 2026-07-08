@@ -43,14 +43,14 @@
           <button type="button" class="cp-guide-player__choice" data-cp-mode="birthday" aria-expanded="false" aria-controls="cp-panel-birthday">
             <span class="cp-guide-player__choice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M7 3v4M17 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path></svg></span>
             <span class="cp-guide-player__choice-title">誕生日から探す</span>
-            <span class="cp-guide-player__choice-text">同じ日・同じ月に生まれた選手を探す</span>
+            <span class="cp-guide-player__choice-text">月だけでも、同じ誕生月の選手を探す</span>
             <span class="cp-guide-player__choice-arrow" aria-hidden="true">→</span>
           </button>
 
           <button type="button" class="cp-guide-player__choice" data-cp-mode="birthplace" aria-expanded="false" aria-controls="cp-panel-birthplace">
             <span class="cp-guide-player__choice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
             <span class="cp-guide-player__choice-title">出身地から探す</span>
-            <span class="cp-guide-player__choice-text">あなたと同じ都道府県出身の選手を探す</span>
+            <span class="cp-guide-player__choice-text">都道府県や海外の出身国から選手を探す</span>
             <span class="cp-guide-player__choice-arrow" aria-hidden="true">→</span>
           </button>
 
@@ -68,12 +68,12 @@
               <div class="cp-guide-player__panel-card">
                 <div class="cp-guide-player__panel-copy">
                   <h4>あなたの誕生日を選んでください</h4>
-                  <p>同じ日に生まれた選手を優先して、いなければ同じ誕生月の選手を探します。</p>
+                  <p>月を選ぶだけで表示されます。日まで選ぶと、同じ誕生日の選手を優先します。</p>
                   <div class="cp-guide-player__form-row">
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">誕生月</span><select class="cp-guide-player__select" data-cp-month aria-label="誕生月"></select></label>
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">誕生日</span><select class="cp-guide-player__select" data-cp-day aria-label="誕生日"></select></label>
-                    <button class="cp-guide-player__search-button" type="button" data-cp-action="birthday-search">つながる選手を探す</button>
                   </div>
+                  <p class="cp-guide-player__auto-note">選ぶと自動で、つながる選手を表示します。</p>
                 </div>
                 <aside class="cp-guide-player__panel-side" aria-hidden="true"><strong>01</strong><span>SAME DAY / SAME MONTH</span></aside>
               </div>
@@ -85,17 +85,17 @@
               <div class="cp-guide-player__panel-card">
                 <div class="cp-guide-player__panel-copy">
                   <h4>出身地を選んでください</h4>
-                  <p>赤が濃いほど、今季の出身選手が多い都道府県です。地図でも、都道府県の選択欄でも探せます。</p>
+                  <p>都道府県だけでなく、海外の出身国も同じ一覧から選べます。</p>
                   <div class="cp-guide-player__map-area">
                     <div class="cp-guide-player__heatmap" data-cp-map aria-label="出身選手の分布"></div>
                     <div class="cp-guide-player__map-legend" aria-label="ヒートマップの凡例"><span><i></i>0人</span><span><i class="is-one"></i>1人</span><span><i class="is-two"></i>2人</span><span><i class="is-three"></i>3人以上</span></div>
                   </div>
                   <div class="cp-guide-player__form-row">
-                    <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">都道府県</span><select class="cp-guide-player__select" data-cp-prefecture aria-label="都道府県"></select></label>
-                    <button class="cp-guide-player__search-button" type="button" data-cp-action="birthplace-search">つながる選手を探す</button>
+                    <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">出身地</span><select class="cp-guide-player__select" data-cp-prefecture aria-label="出身地"></select></label>
                   </div>
-                  <div class="cp-guide-player__form-row" data-cp-regions aria-label="出身選手がいる都道府県の一覧"></div>
-                  <button type="button" class="cp-guide-player__subaction" data-cp-action="overseas">海外出身の選手を見る</button>
+                  <p class="cp-guide-player__auto-note">出身地を選ぶと自動で表示します。海外出身選手もここから探せます。</p>
+                  <div class="cp-guide-player__form-row" data-cp-regions aria-label="出身選手がいる都道府県・国の一覧"></div>
+                  <button type="button" class="cp-guide-player__subaction" data-cp-action="overseas">海外出身の選手をまとめて見る</button>
                 </div>
                 <aside class="cp-guide-player__panel-side" aria-hidden="true"><strong>02</strong><span>FIND FROM YOUR PLACE</span></aside>
               </div>
@@ -110,8 +110,8 @@
                   <p>同じ生まれ年を優先して、いなければ前後1年、同じ年代の順で選手を探します。</p>
                   <div class="cp-guide-player__form-row">
                     <label class="cp-guide-player__select-wrap"><span class="cp-visually-hidden">生まれ年</span><select class="cp-guide-player__select" data-cp-year aria-label="生まれ年"></select></label>
-                    <button class="cp-guide-player__search-button" type="button" data-cp-action="generation-search">つながる選手を探す</button>
                   </div>
+                  <p class="cp-guide-player__auto-note">生まれ年を選ぶと自動で、近い世代の選手を表示します。</p>
                 </div>
                 <aside class="cp-guide-player__panel-side" aria-hidden="true"><strong>03</strong><span>SAME YEAR / SAME ERA</span></aside>
               </div>
