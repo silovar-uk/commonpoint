@@ -44,7 +44,6 @@ class CommonPointFinder {
     this.cache.panels = [...this.root.querySelectorAll('[data-cp-panel]')];
     this.cache.results = this.root.querySelector('[data-cp-results]');
     this.cache.month = this.root.querySelector('[data-cp-month]');
-    this.cache.day = this.root.querySelector('[data-cp-day]');
     this.cache.year = this.root.querySelector('[data-cp-year]');
     this.cache.prefecture = this.root.querySelector('[data-cp-prefecture]');
     this.cache.map = this.root.querySelector('[data-cp-map]');
@@ -57,8 +56,7 @@ class CommonPointFinder {
   }
 
   fillSelects() {
-    this.cache.month.innerHTML = '<option value="">月を選ぶ</option>' + Array.from({ length: 12 }, (_, index) => `<option value="${index + 1}">${index + 1}月</option>`).join('');
-    this.cache.day.innerHTML = '<option value="">日まで選ぶ</option>' + Array.from({ length: 31 }, (_, index) => `<option value="${index + 1}">${index + 1}日</option>`).join('');
+    this.cache.month.innerHTML = '<option value="">誕生月を選ぶ</option>' + Array.from({ length: 12 }, (_, index) => `<option value="${index + 1}">${index + 1}月</option>`).join('');
     const years = [...new Set(this.activePlayers.map((player) => dateParts(player.birthDate).year))].sort((a, b) => b - a);
     this.cache.year.innerHTML = '<option value="">生まれ年を選ぶ</option>' + years.map((year) => `<option value="${year}">${year}年</option>`).join('');
 
@@ -73,10 +71,6 @@ class CommonPointFinder {
       if (event.key === 'Escape' && this.state.activeMode) this.closeMode();
     });
     this.cache.month.addEventListener('change', () => {
-      this.updateDayOptions();
-      if (this.cache.month.value) this.queueAutoSearch('birthday');
-    });
-    this.cache.day.addEventListener('change', () => {
       if (this.cache.month.value) this.queueAutoSearch('birthday');
     });
     this.cache.prefecture.addEventListener('change', () => {
@@ -87,7 +81,6 @@ class CommonPointFinder {
     this.cache.year.addEventListener('change', () => {
       if (this.cache.year.value) this.queueAutoSearch('generation');
     });
-    this.root.querySelector('[data-cp-action="birthday-search"]')?.addEventListener('click', () => this.searchBirthday());
     this.root.querySelector('[data-cp-action="birthplace-search"]')?.addEventListener('click', () => this.searchBirthplace());
     this.root.querySelector('[data-cp-action="generation-search"]')?.addEventListener('click', () => this.searchGeneration());
     this.root.querySelector('[data-cp-action="overseas"]')?.addEventListener('click', () => this.showOverseas());
@@ -100,9 +93,9 @@ class CommonPointFinder {
   queueAutoSearch(mode) {
     window.clearTimeout(this.autoSearchTimer);
     this.autoSearchTimer = window.setTimeout(() => {
-      if (mode === 'birthday') this.searchBirthday({ automatic: true });
-      if (mode === 'birthplace') this.searchBirthplace({ automatic: true });
-      if (mode === 'generation') this.searchGeneration({ automatic: true });
+      if (mode === 'birthday') this.searchBirthday();
+      if (mode === 'birthplace') this.searchBirthplace();
+      if (mode === 'generation') this.searchGeneration();
     }, 80);
   }
 
@@ -172,16 +165,6 @@ class CommonPointFinder {
     });
   }
 
-  updateDayOptions() {
-    const month = Number(this.cache.month.value);
-    const maxDay = month === 2 ? 29 : [4, 6, 9, 11].includes(month) ? 30 : 31;
-    [...this.cache.day.options].forEach((option) => {
-      if (!option.value) return;
-      option.hidden = Number(option.value) > maxDay;
-    });
-    if (Number(this.cache.day.value) > maxDay) this.cache.day.value = '';
-  }
-
   getActivePlayers() {
     return [...this.activePlayers].sort((a, b) => (a.displayRank ?? 999) - (b.displayRank ?? 999) || a.number - b.number || a.name.localeCompare(b.name, 'ja'));
   }
@@ -192,33 +175,28 @@ class CommonPointFinder {
 
   searchBirthday() {
     const month = Number(this.cache.month.value);
-    const day = Number(this.cache.day.value);
     if (!month) {
-      this.renderEmpty('誕生月を選んでください。', '月を選ぶだけで、同じ誕生月の選手を表示します。日まで選ぶと、同じ誕生日の選手を優先します。', 'birthday');
+      this.renderEmpty('誕生月を選んでください。', '月を選ぶと、同じ誕生月の選手を表示します。', 'birthday');
       return;
     }
-    const exactKey = day ? `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` : '';
-    const exact = day ? this.activePlayers.filter((player) => dateParts(player.birthDate).md === exactKey) : [];
     const sameMonth = this.activePlayers.filter((player) => dateParts(player.birthDate).month === month);
-    const isExact = Boolean(day && exact.length);
-    const result = isExact ? exact : sameMonth;
-    if (!result.length) {
+    if (!sameMonth.length) {
       this.renderEmpty(`${month}月生まれの選手は見つかりませんでした。`, '出身地や世代からも、あなたとつながる選手を探せます。', 'birthplace');
-      this.emit('cp_search_execute', { mode: 'birthday' });
-      this.emit('cp_result_view', { mode: 'birthday', result_type: 'empty', result_count_bucket: '0' });
+      this.emit('cp_search_execute', { mode: 'birthmonth' });
+      this.emit('cp_result_view', { mode: 'birthmonth', result_type: 'empty', result_count_bucket: '0' });
       return;
     }
-    const entries = this.trimEntries(result);
+    const entries = this.trimEntries(sameMonth);
     this.renderResults({
-      kicker: isExact ? 'BIRTHDAY MATCH' : 'BIRTH MONTH MATCH',
-      title: isExact ? `あなたと同じ${month}月${day}日生まれの選手` : `あなたと同じ${month}月生まれの選手`,
-      description: isExact ? '同じ日が、応援を始める小さなきっかけに。' : '月を選ぶだけでも、同じ誕生月の選手を見つけられます。',
+      kicker: 'BIRTH MONTH MATCH',
+      title: `あなたと同じ${month}月生まれの選手`,
+      description: '同じ誕生月から、応援したい選手を見つけられます。',
       entries,
-      reason: isExact ? `あなたと同じ${month}月${day}日生まれ` : `あなたと同じ${month}月生まれ`,
-      match: this.matchEnabled && day ? this.findBirthdayMatch(month, day) : null
+      reason: `あなたと同じ${month}月生まれ`,
+      match: null
     });
-    this.emit('cp_search_execute', { mode: 'birthday' });
-    this.emit('cp_result_view', { mode: 'birthday', result_type: isExact ? 'exact' : 'broadened', result_count_bucket: this.countBucket(entries.length) });
+    this.emit('cp_search_execute', { mode: 'birthmonth' });
+    this.emit('cp_result_view', { mode: 'birthmonth', result_type: 'exact', result_count_bucket: this.countBucket(entries.length) });
   }
 
   searchBirthplace() {
@@ -234,7 +212,7 @@ class CommonPointFinder {
       this.state.selectedPrefecture = value;
       this.highlightMap();
       if (!entries.length) {
-        this.renderEmpty(`${country}出身の選手は見つかりませんでした。`, '別の出身地や、誕生日・世代から探してみよう。', 'birthplace');
+        this.renderEmpty(`${country}出身の選手は見つかりませんでした。`, '別の出身地や、誕生月・世代から探してみよう。', 'birthplace');
         this.emit('cp_search_execute', { mode: 'birthplace' });
         this.emit('cp_result_view', { mode: 'birthplace', result_type: 'empty', result_count_bucket: '0' });
         return;
@@ -287,7 +265,7 @@ class CommonPointFinder {
     const sameDecade = this.activePlayers.filter((player) => Math.floor(dateParts(player.birthDate).year / 10) * 10 === decade);
     const selected = exact.length ? exact : near.length ? near : sameDecade;
     if (!selected.length) {
-      this.renderEmpty('近い世代の選手は見つかりませんでした。', '誕生日や出身地からも、選手を探せます。', 'birthday');
+      this.renderEmpty('近い世代の選手は見つかりませんでした。', '誕生月や出身地からも、選手を探せます。', 'birthday');
       this.emit('cp_search_execute', { mode: 'generation' });
       this.emit('cp_result_view', { mode: 'generation', result_type: 'empty', result_count_bucket: '0' });
       return;
@@ -406,7 +384,7 @@ class CommonPointFinder {
   }
 
   renderEmpty(title, description, suggestMode) {
-    this.cache.results.innerHTML = `<div class="cp-guide-player__result-shell"><div class="cp-guide-player__empty"><span class="cp-guide-player__empty-art" aria-hidden="true"></span><div><h4>${escapeHtml(title)}</h4><p>${escapeHtml(description)}</p><button type="button" data-cp-suggest-mode="${escapeHtml(suggestMode)}">${suggestMode === 'birthplace' ? '出身地から探す' : suggestMode === 'generation' ? '世代から探す' : '誕生日から探す'}</button></div></div></div>`;
+    this.cache.results.innerHTML = `<div class="cp-guide-player__result-shell"><div class="cp-guide-player__empty"><span class="cp-guide-player__empty-art" aria-hidden="true"></span><div><h4>${escapeHtml(title)}</h4><p>${escapeHtml(description)}</p><button type="button" data-cp-suggest-mode="${escapeHtml(suggestMode)}">${suggestMode === 'birthplace' ? '出身地から探す' : suggestMode === 'generation' ? '世代から探す' : '誕生月から探す'}</button></div></div></div>`;
     this.cache.results.scrollIntoView({ behavior: this.reduceMotion() ? 'auto' : 'smooth', block: 'nearest' });
   }
 
